@@ -1,55 +1,87 @@
-"use strict";
+(function (window) {
+    const app = window.todoApp = window.todoApp || {};
 
-const todoForm = document.getElementById("todo-form");
-const taskInput = document.getElementById("task-input");
-const priorityInput = document.getElementById("priority");
-const dueDateInput = document.getElementById("due-date");
+    function bindEvents(state, actions) {
+        const { elements } = state;
 
-todoForm.addEventListener("submit", handleAddTask);
-taskList.addEventListener("click", handleTaskActions);
-taskList.addEventListener("change", handleTaskComplete);
+        if (elements.form) {
+            elements.form.addEventListener('submit', (event) => {
+                event.preventDefault();
 
-function handleAddTask(event) {
-    event.preventDefault();
+                actions.addTask({
+                    title: elements.taskInput ? elements.taskInput.value : '',
+                    priority: elements.prioritySelect ? elements.prioritySelect.value : 'medium',
+                    dueDate: elements.dueDateInput ? elements.dueDateInput.value : ''
+                });
+            });
+        }
 
-    if (isEmpty(taskInput.value)) {
-        alert("Please enter a task.");
-        return;
+        if (elements.searchInput) {
+            elements.searchInput.addEventListener('input', (event) => {
+                actions.updateSearchQuery(event.target.value);
+            });
+        }
+
+        elements.filterButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                actions.setFilter(button.dataset.filter || 'all');
+            });
+        });
+
+        if (elements.taskList) {
+            elements.taskList.addEventListener('change', (event) => {
+                const actionElement = event.target.closest('[data-action="toggle-task"]');
+
+                if (!actionElement) {
+                    return;
+                }
+
+                const taskId = actionElement.dataset.taskId || actionElement.closest('[data-task-id]')?.dataset.taskId;
+
+                if (taskId) {
+                    actions.toggleTask(taskId, event.target.checked);
+                }
+            });
+
+            elements.taskList.addEventListener('click', (event) => {
+                const editButton = event.target.closest('[data-action="edit-task"]');
+
+                if (editButton) {
+                    const taskId = editButton.dataset.taskId || editButton.closest('[data-task-id]')?.dataset.taskId;
+
+                    if (taskId) {
+                        actions.editTask(taskId);
+                    }
+
+                    return;
+                }
+
+                const actionElement = event.target.closest('[data-action="delete-task"]');
+
+                if (!actionElement) {
+                    return;
+                }
+
+                const taskId = actionElement.dataset.taskId || actionElement.closest('[data-task-id]')?.dataset.taskId;
+
+                if (taskId) {
+                    actions.deleteTask(taskId);
+                }
+            });
+        }
+
+        if (elements.themeToggle) {
+            elements.themeToggle.addEventListener('click', () => {
+                actions.toggleTheme();
+            });
+        }
+
+        window.addEventListener('storage', (event) => {
+            actions.handleStorageChange(event);
+        });
     }
 
-    const task = {
-        id: generateId(),
-        title: taskInput.value.trim(),
-        priority: priorityInput.value,
-        dueDate: dueDateInput.value,
-        completed: false
+    app.events = {
+        bindEvents
     };
-
-    addTask(task);
-    renderTasks(getTasks());
-    todoForm.reset();
-}
-
-function handleTaskActions(event) {
-    const deleteButton = event.target.closest(".delete");
-
-    if (!deleteButton) return;
-
-    const taskItem = deleteButton.closest(".task-item");
-    deleteTask(taskItem.dataset.id);
-    renderTasks(getTasks());
-}
-
-function handleTaskComplete(event) {
-    if (!event.target.classList.contains("task-checkbox")) return;
-
-    const taskItem = event.target.closest(".task-item");
-    const tasks = getTasks();
-    const task = tasks.find(task => task.id === taskItem.dataset.id);
-
-    if (!task) return;
-
-    task.completed = event.target.checked;
-    updateTask(task);
-    renderTasks(getTasks());
-}
+})(window);

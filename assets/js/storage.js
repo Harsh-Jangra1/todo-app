@@ -1,35 +1,71 @@
-"use strict";
+(function (window) {
+    const STORAGE_KEYS = Object.freeze({
+        tasks: 'todo-app.tasks',
+        theme: 'todo-app.theme'
+    });
 
-const STORAGE_KEY = "todoTasks";
+    function isStorageAvailable() {
+        try {
+            const testKey = '__todo_app_test__';
+            window.localStorage.setItem(testKey, testKey);
+            window.localStorage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 
-function getTasks() {
-    const tasks = localStorage.getItem(STORAGE_KEY);
-    return tasks ? JSON.parse(tasks) : [];
-}
+    const canUseStorage = isStorageAvailable();
 
-function saveTasks(tasks) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-}
+    function read(key, fallbackValue) {
+        if (!canUseStorage) {
+            return fallbackValue;
+        }
 
-function addTask(task) {
-    const tasks = getTasks();
-    tasks.push(task);
-    saveTasks(tasks);
-}
+        try {
+            const rawValue = window.localStorage.getItem(key);
+            return rawValue === null ? fallbackValue : JSON.parse(rawValue);
+        } catch (error) {
+            return fallbackValue;
+        }
+    }
 
-function updateTask(updatedTask) {
-    const tasks = getTasks().map(task =>
-        task.id === updatedTask.id ? updatedTask : task
-    );
+    function write(key, value) {
+        if (!canUseStorage) {
+            return;
+        }
 
-    saveTasks(tasks);
-}
+        try {
+            window.localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            // Ignore quota and serialization failures so the app keeps working.
+        }
+    }
 
-function deleteTask(id) {
-    const tasks = getTasks().filter(task => task.id !== id);
-    saveTasks(tasks);
-}
+    function loadTasks() {
+        const tasks = read(STORAGE_KEYS.tasks, []);
+        return Array.isArray(tasks) ? tasks : [];
+    }
 
-function clearTasks() {
-    localStorage.removeItem(STORAGE_KEY);
-}
+    function saveTasks(tasks) {
+        write(STORAGE_KEYS.tasks, Array.isArray(tasks) ? tasks : []);
+    }
+
+    function loadTheme() {
+        const theme = read(STORAGE_KEYS.theme, null);
+        return theme === 'dark' || theme === 'light' ? theme : null;
+    }
+
+    function saveTheme(theme) {
+        write(STORAGE_KEYS.theme, theme === 'dark' ? 'dark' : 'light');
+    }
+
+    window.todoApp = window.todoApp || {};
+    window.todoApp.storage = {
+        keys: STORAGE_KEYS,
+        loadTasks,
+        saveTasks,
+        loadTheme,
+        saveTheme
+    };
+})(window);

@@ -1,39 +1,60 @@
-"use strict";
+(function (window) {
+    const app = window.todoApp = window.todoApp || {};
 
-const searchInput=document.getElementById("search-task");
-const filterButtons=document.querySelectorAll(".filter-btn");
-
-searchInput.addEventListener("input",handleSearch);
-
-filterButtons.forEach(button=>{
-    button.addEventListener("click",handleFilter);
-});
-
-function handleSearch(){
-    const keyword=searchInput.value.toLowerCase().trim();
-    const filteredTasks=getTasks().filter(task=>
-        task.title.toLowerCase().includes(keyword)
-    );
-
-    renderTasks(filteredTasks);
-}
-
-function handleFilter(event){
-    filterButtons.forEach(button=>{
-        button.classList.remove("active");
-    });
-
-    event.currentTarget.classList.add("active");
-    const filter=event.currentTarget.dataset.filter;
-    let tasks=getTasks();
-
-    if(filter==="active"){
-        tasks=tasks.filter(task=>!task.completed);
+    function normalizeQuery(query) {
+        return String(query ?? '').trim().toLowerCase();
     }
 
-    if(filter==="completed"){
-        tasks=tasks.filter(task=>task.completed);
+    function matchesFilter(task, filter) {
+        if (filter === 'completed') {
+            return task.completed;
+        }
+
+        if (filter === 'active') {
+            return !task.completed;
+        }
+
+        return true;
     }
 
-    renderTasks(tasks);
-}
+    function matchesQuery(task, query) {
+        if (!query) {
+            return true;
+        }
+
+        const haystack = [
+            task.title,
+            app.utils.getPriorityLabel(task.priority),
+            app.utils.getDueDateLabel(task),
+            task.completed ? 'completed' : 'active'
+        ]
+            .join(' ')
+            .toLowerCase();
+
+        return haystack.includes(query);
+    }
+
+    function getVisibleTasks(tasks, filter, query) {
+        const normalizedTasks = Array.isArray(tasks) ? tasks : [];
+        const normalizedQuery = normalizeQuery(query);
+
+        return normalizedTasks.filter((task) => matchesFilter(task, filter) && matchesQuery(task, normalizedQuery));
+    }
+
+    function getTaskStats(tasks) {
+        const normalizedTasks = Array.isArray(tasks) ? tasks : [];
+        const completedCount = normalizedTasks.filter((task) => task.completed).length;
+
+        return {
+            total: normalizedTasks.length,
+            completed: completedCount,
+            pending: normalizedTasks.length - completedCount
+        };
+    }
+
+    app.filters = {
+        normalizeQuery,
+        getVisibleTasks,
+        getTaskStats
+    };
+})(window);

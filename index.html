@@ -19,11 +19,11 @@
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
     <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="stylesheet" href="./assets/css/responsive.css">
     <link rel="stylesheet" href="./assets/css/animations.css">
+    <link rel="stylesheet" href="./assets/css/responsive.css">
 </head>
 
-<body>
+<body data-theme="light">
     <main class="todo-app-container">
         <section class="todo-app" aria-label="To-Do Application">
             <header class="todo-header">
@@ -32,24 +32,27 @@
                     <h1>To-Do List</h1>
                 </div>
 
-                <button type="button" class="theme-toggle" aria-label="Toggle Theme">
+                <button type="button" class="theme-toggle" aria-label="Toggle theme" aria-pressed="false">
                     <i class="fa-solid fa-moon"></i>
                 </button>
             </header>
 
-            <form class="todo-form">
+            <form class="todo-form" id="todo-form" novalidate>
                 <div class="input-group">
+                    <label class="sr-only" for="task-input">Task title</label>
                     <input type="text" id="task-input" placeholder="Enter a new task..." autocomplete="off" required>
                 </div>
 
                 <div class="form-options">
-                    <select id="priority">
-                        <option value="low">Low Priority</option>
-                        <option value="medium" selected>Medium Priority</option>
-                        <option value="high">High Priority</option>
+                    <label class="sr-only" for="priority">Task priority</label>
+                    <select id="priority" aria-label="Task priority">
+                        <option value="low">Low priority</option>
+                        <option value="medium" selected>Medium priority</option>
+                        <option value="high">High priority</option>
                     </select>
 
-                    <input type="date" id="due-date">
+                    <label class="sr-only" for="due-date">Due date</label>
+                    <input type="date" id="due-date" aria-label="Due date">
                 </div>
 
                 <button type="submit" class="add-task-btn">
@@ -59,16 +62,17 @@
             </form>
 
             <section class="search-section">
+                <label class="sr-only" for="search-task">Search tasks</label>
                 <input type="search" id="search-task" placeholder="Search tasks...">
             </section>
 
             <section class="filter-section">
-                <button type="button" class="filter-btn active" data-filter="all">All</button>
-                <button type="button" class="filter-btn" data-filter="active">Active</button>
-                <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+                <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+                <button type="button" class="filter-btn" data-filter="active" aria-pressed="false">Active</button>
+                <button type="button" class="filter-btn" data-filter="completed" aria-pressed="false">Completed</button>
             </section>
 
-            <section class="stats">
+            <section class="stats" aria-label="Task statistics">
                 <article class="stat-card">
                     <h3>Total</h3>
                     <p id="total-tasks">0</p>
@@ -86,10 +90,10 @@
             </section>
 
             <section class="task-section" aria-label="Task List">
-                <ul id="task-list" class="task-list"></ul>
+                <ul id="task-list" class="task-list" aria-live="polite" aria-relevant="additions removals"></ul>
             </section>
 
-            <section id="empty-state" class="empty-state">
+            <section id="empty-state" class="empty-state" role="status" aria-live="polite" aria-atomic="true">
                 <i class="fa-regular fa-folder-open"></i>
                 <h2>No Tasks Yet</h2>
                 <p>Start by adding your first task.</p>
