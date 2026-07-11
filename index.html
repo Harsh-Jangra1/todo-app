@@ -24,7 +24,82 @@
 </head>
 
 <body>
+    <main class="todo-app-container">
+        <section class="todo-app" aria-label="To-Do Application">
+            <header class="todo-header">
+                <div class="logo">
+                    <i class="fa-solid fa-list-check"></i>
+                    <h1>To-Do List</h1>
+                </div>
 
+                <button type="button" class="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </header>
+
+            <form class="todo-form">
+                <div class="input-group">
+                    <input type="text" id="task-input" placeholder="Enter a new task..." autocomplete="off" required>
+                </div>
+
+                <div class="form-options">
+                    <select id="priority">
+                        <option value="low">Low Priority</option>
+                        <option value="medium" selected>Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+
+                    <input type="date" id="due-date">
+                </div>
+
+                <button type="submit" class="add-task-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Add Task</span>
+                </button>
+            </form>
+
+            <section class="search-section">
+                <input type="search" id="search-task" placeholder="Search tasks...">
+            </section>
+
+            <section class="filter-section">
+                <button type="button" class="filter-btn active" data-filter="all">All</button>
+                <button type="button" class="filter-btn" data-filter="active">Active</button>
+                <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+            </section>
+
+            <section class="stats">
+                <article class="stat-card">
+                    <h3>Total</h3>
+                    <p id="total-tasks">0</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Completed</h3>
+                    <p id="completed-tasks">0</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Pending</h3>
+                    <p id="pending-tasks">0</p>
+                </article>
+            </section>
+
+            <section class="task-section" aria-label="Task List">
+                <ul id="task-list" class="task-list"></ul>
+            </section>
+
+            <section id="empty-state" class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <h2>No Tasks Yet</h2>
+                <p>Start by adding your first task.</p>
+            </section>
+
+            <footer class="todo-footer">
+                <p>Made with ❤️ <span>by</span> <strong>Harsh Jangra</strong></p>
+            </footer>
+        </section>
+    </main>
 
     <script src="https://kit.fontawesome.com/59965007f8.js" crossorigin="anonymous"></script>
 
