@@ -1,0 +1,173 @@
+@media (max-width:992px) {
+    .todo-app {
+        max-width: 700px;
+        padding: 2rem;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width:768px) {
+    body {
+        padding: 1.5rem;
+    }
+
+    .todo-app {
+        padding: 1.5rem;
+    }
+
+    .todo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .theme-toggle {
+        align-self: flex-end;
+    }
+
+    .form-options {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width:576px) {
+    body {
+        padding: 1rem;
+    }
+
+    .todo-app {
+        padding: 1.25rem;
+        border-radius: 20px;
+    }
+
+    .logo h1 {
+        font-size: 1.6rem;
+    }
+
+    .logo i {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .theme-toggle {
+        width: 46px;
+        height: 46px;
+    }
+
+    .input-group input,
+    .form-options input,
+    .form-options select,
+    .add-task-btn,
+    .search-section input {
+        height: 54px;
+    }
+
+    .filter-section {
+        justify-content: center;
+    }
+
+    .filter-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .stat-card p {
+        font-size: 1.75rem;
+    }
+
+    .task-item {
+        padding: 1rem;
+    }
+
+    .task-actions {
+        justify-content: space-between;
+    }
+
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width:480px) {
+    .logo {
+        gap: .75rem;
+    }
+
+    .logo h1 {
+        font-size: 1.4rem;
+    }
+
+    .task-left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .priority {
+        align-self: flex-start;
+    }
+
+    .todo-footer p {
+        font-size: .85rem;
+    }
+}
+
+@media (max-width:360px) {
+    body {
+        padding: .75rem;
+    }
+
+    .todo-app {
+        padding: 1rem;
+    }
+
+    .filter-section {
+        flex-direction: column;
+    }
+
+    .filter-btn {
+        width: 100%;
+    }
+
+    .task-actions {
+        gap: .5rem;
+    }
+
+    .task-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-card h3 {
+        font-size: .9rem;
+    }
+
+    .stat-card p {
+        font-size: 1.5rem;
+    }
+}
