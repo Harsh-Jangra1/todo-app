@@ -2,7 +2,6 @@
 
 const taskList = document.getElementById("task-list");
 const emptyState = document.getElementById("empty-state");
-
 const totalTasks = document.getElementById("total-tasks");
 const completedTasks = document.getElementById("completed-tasks");
 const pendingTasks = document.getElementById("pending-tasks");
